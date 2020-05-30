@@ -1,0 +1,343 @@
+"""
+  AO PREENCHER ESSE CABEÇALHO COM O MEU NOME E O MEU NÚMERO USP,
+  DECLARO QUE SOU O ÚNICO AUTOR E RESPONSÁVEL POR ESSE PROGRAMA.
+  TODAS AS PARTES ORIGINAIS DESSE EXERCÍCIO PROGRAMA (EP) FORAM
+  DESENVOLVIDAS E IMPLEMENTADAS POR MIM SEGUINDO AS INSTRUÇÕES
+  DESSE EP E QUE PORTANTO NÃO CONSTITUEM DESONESTIDADE ACADÊMICA
+  OU PLÁGIO.
+  DECLARO TAMBÉM QUE SOU RESPONSÁVEL POR TODAS AS CÓPIAS
+  DESSE PROGRAMA E QUE EU NÃO DISTRIBUI OU FACILITEI A
+  SUA DISTRIBUIÇÃO. ESTOU CIENTE QUE OS CASOS DE PLÁGIO E
+  DESONESTIDADE ACADÊMICA SERÃO TRATADOS SEGUNDO OS CRITÉRIOS
+  DIVULGADOS NA PÁGINA DA DISCIPLINA.
+  ENTENDO QUE EPS SEM ASSINATURA NÃO SERÃO CORRIGIDOS E,
+  AINDA ASSIM, PODERÃO SER PUNIDOS POR DESONESTIDADE ACADÊMICA.
+
+  Nome :
+  NUSP :
+  Turma:
+  Prof.:
+
+  Referências: Com exceção das rotinas fornecidas no enunciado
+  e em sala de aula, caso você tenha utilizado alguma refência,
+  liste-as abaixo para que o seu programa não seja considerado
+  plágio ou irregular.
+
+  Exemplo:
+  - O algoritmo Quicksort foi baseado em
+  http://www.ime.usp.br/~pf/algoritmos/aulas/quick.html
+"""
+# ======================================================================
+# FUNÇÕES OBRIGATÓRIAS
+# Implemente  neste bloco as funções obrigatórias do EP2.
+# NÃO modifique os nomes e parâmetros dessas funções.
+# ======================================================================
+def polinomioComRaiz(p,b):
+    """Devolve True se b é raiz do polinômio representado pela lista p,
+       ou False no caso contrário.
+
+       p -- a lista dos coeficientes do polinômio
+       b -- o número a ser testado como raiz
+    """
+
+    # Escreva aqui o corpo da função
+    resultadof = 0
+    for t in range (len(p)):
+         resultadof = p[t]*b**t + resultadof
+    if resultadof == 0:
+        return True    #  Ajuste o valor de retorno
+    else:
+        return False
+# ======================================================================
+
+def polinomioQuociente(p,b):
+    """Devolve a lista que representa o polinômio quociente da divisão
+       p(x)/(x-b), onde p(x) é o polinômio cujos coeficientes estão na
+       lista p e b é uma raiz de p(x).
+
+       p -- a lista dos coeficientes do polinômio a ser dividido
+       b -- a raiz a ser usada como divisor
+    """
+
+    # Escreva aqui o corpo da função
+    n = (len(p) - 1)
+    np = []
+    g = 0
+
+    np.append(p[n])
+    while n > 0:
+        r = np[g] * b + (p[n - 1])
+        np.append(r)
+        g += 1
+        n -= 1
+    del(np[g])
+    np.reverse()
+    print(np)
+    return (np)      #  Ajuste o valor de retorno
+
+# ======================================================================
+def listaCanonicaDeRaizes(p):
+    """Devolve a lista canônica de raízes inteiras do polinômio
+       representado pela lista p.
+
+       p -- a lista dos coeficientes do polinômios
+    """
+
+    # Escreva aqui o corpo da função
+    nc = []
+    ndiv = []
+    valor = 0
+    while p[valor] == 0:
+        valor += 1
+        nc.append(0)
+    c = int(p[valor])
+    if c < 0:
+        c = c * -1
+    for d in range(1, c):
+        if (c%d == 0):
+            ndiv.append(-d)
+            ndiv.append(+d)
+    for d in range(len(ndiv)):
+        m = polinomioComRaiz( p, ndiv[d])
+        if m == True:
+            nc.append(ndiv[d])
+            pl = polinomioQuociente(p, ndiv[d])
+            kk = polinomioComRaiz(pl, ndiv[d])
+            if kk == True:
+                nc.append(ndiv[d])
+
+    return (nc)
+
+# ======================================================================
+def polinomioQuocienteRacional(p,b,a):
+    """Devolve a lista que representa o polinômio quociente da divisão
+       p(x)/(ax-b) e o resto dessa divisão, onde p(x) é o polinômio
+       cujos coeficientes estão na lista p e b/a é uma raiz de p(x).
+
+       p -- a lista dos coeficientes do polinômio a ser dividido
+       b -- numerador da raiz a ser usada como divisor
+       a -- denominador da raiz a ser usada como divisor
+    """
+    r = -1
+    n = (len(p) -1)
+    #if n > 0:
+    nqr = []
+    nqr.append(p[n])
+    for i in range(n, 0, -1):
+        g = ((nqr[len(nqr) - 1]*(b)/a) + p[i - 1])
+        print(g)
+        nqr.append(g)
+    nqr.reverse()
+    if len(nqr) == len(p):
+        r = nqr[0]
+    else:
+        r = 0
+    del(nqr[0])
+    for i in range (len(nqr)):
+        nqr[i] = nqr[i] / a
+    if len(nqr) == 0:
+        return(None , -1)
+    return(nqr, r)
+
+#        # Escreva aqui o corpo da função
+#
+#    #  Ajuste o valor de retorno
+# =====================================================================
+def listaRaizesRacionais(p):
+    """Devolve a lista canônica de raízes racionais do polinômio
+       representado pela lista p.
+
+       p -- a lista dos coeficientes do polinômio
+    """
+
+    # Escreva aqui o corpo da função
+    divp0 = []
+    pqr = []
+    posr = []
+    divpn = []
+    while p[0] == 0:
+        pqr.append(0)
+        del(p[0])
+    n = (len(p) - 1)
+    p0 = p[0]
+    if p[0] < 0:
+        p0 = p[0] * -1
+    for d in range(1, (int(p0))+1):
+        resul = p0 % d
+        if (resul == 0):
+            divp0.append(d)
+    pn = p[n]
+    if p[n] < 0:
+        pn = p[n] * -1
+    for dd in range(1, (int(pn))+1):
+        resul = pn % dd
+        if (resul == 0):
+            divpn.append(dd)
+    for b in divpn:
+        for a in divp0:
+            divisoes = a / b
+            if divisoes not in posr:
+                posr.append(-divisoes)
+                posr.append(divisoes)
+    for m in range(len(posr)):
+        h = polinomioQuocienteRacional(p, posr[m], 1)
+        if h[1] == 0:
+            pqr.append(posr[m])
+            dupli = polinomioQuociente(p,posr[m])
+            dupli1 = polinomioQuocienteRacional(dupli, posr[m], 1)
+            if dupli1[1] == 0:
+                pqr.append(posr[m])
+    return(pqr)      #  Ajuste o valor de retorno
+
+# ======================================================================
+def racionalToString(pn,r):
+    """Devolve uma string que apresenta a raiz r do polinômio do qual pn
+       é o coeficiente de maior grau como:
+        - um inteiro, caso r seja inteiro
+        - na forma b/a, com b e a primos entre si e a > 0, caso contrário
+
+       pn -- coeficiente de maior grau do polinômio
+       r -- uma raiz do polinômio
+    """
+
+    # Escreva aqui o corpo da função
+    def MDC(a, b):
+        if a < b:
+            a,b = b,a
+        while b > 0:
+            r = a % b
+            a = b
+            b = r
+        return a
+    if pn == 0:
+        return("0")
+    if r == -2:
+        r = -2
+        pn = 20
+    if r == 0:
+        return("0")
+    round = r * pn
+    if pn < 0:
+        mdc = MDC(pn * -1, round)
+    if r < 0:
+        mdc = MDC(pn, round * -1)
+    denomi = round / mdc
+    numerador = pn / mdc
+    h = denomi / numerador
+    if h < 1 or h > 1:
+        print(str(int(h)))
+    else:
+        print(str(int(denomi))+"/"+str(int(numerador)))
+
+# ======================================================================
+# FIM DO BLOCO DE FUNÇÕES OBRIGATÓRIAS
+# ======================================================================
+
+
+# ======================================================================
+# FUNÇÕES ADICIONAIS
+# Implemente neste bloco as funções adicionais às obrigatórias do EP2.
+# Duas funções desse tipo (a polinomioToString e a sig) foram
+# fornecidas no próprio enunciado do EP.
+# ======================================================================
+def polinomioToString(p):
+    """Devolve uma string que representa o polinômio em um formato
+       legível para humanos.
+
+       p -- a lista dos coeficientes do polinômio
+    """
+def racionalToString(pn,r):
+    """Devolve uma string que apresenta a raiz r do polinômio do qual pn 
+       é o coeficiente de maior grau como:
+        - um inteiro, caso r seja inteiro
+        - na forma b/a, com b e a primos entre si e a > 0, caso contrário
+
+       pn -- coeficiente de maior grau do polinômio
+       r -- uma raiz do polinômio
+    """
+    
+    if r % 1 == 0:
+        return ( '%d' %(r))
+    else:
+        a = round(r*pn)
+        b = pn
+        h = MDC(a, b)
+        a = (a / h)
+        b = (b / h)
+        return ("%d/%d" %(a, b))
+
+# ======================================================================
+def sig(nTermAnte,coef):
+    """Devolve '+' se coef não é negativo e existe termo anterior ao
+       termo dele no polinômio. Devolve '' (string vazia) no caso
+       contrário. Usado para determinar se o '+' deve aparecer antes
+       de coef na string que representa o polinômio.
+
+       nTermAnte -- expoente de x no termo anterior ao termo do coef
+       coef -- coeficiente de um termo do polinômio
+    """
+    if nTermAnte > 0 and coef >= 0:
+        return "+"
+    else:
+        return ""
+
+# ======================================================================
+# FIM DO BLOCO DE FUNÇÕES ADICIONAIS
+# ======================================================================
+#Baseado no materia de estudo disponibilizado no site do ime
+def MDC(a, b):
+    while b != 0:
+        r = a % b
+        a = b
+        b = r
+    return a
+
+# ======================================================================
+# FUNÇÃO MAIN
+# Escreva dentro da função main() o código que quiser para testar suas
+# demais funções.
+# Somente dentro da função main() você pode usar as funções print e
+# input.
+# O código da função main() NÃO será avaliado.
+# ======================================================================
+def main():
+    n = int(input("Digite o grau: "))
+
+    # Lê os coeficientes do polinômio
+    p = []
+    for i in range(n+1):
+        p.append(float(input("Digite p["+str(i)+"]: ")))
+        i += 1
+
+    # Obtém a lista de raízes
+    if p[n] == 1:
+        raizes = listaCanonicaDeRaizes(p)
+        print( 'A lista canonica das raizes inteiras de p(x) =',
+               polinomioToString(p), 'eh:')
+    else:
+        raizes = listaRaizesRacionais(p)
+        print( 'A lista canonica das raizes racionais de p(x) =',
+               polinomioToString(p), 'eh:')
+
+    # Imprime a lista canônica de raízes
+    for raiz in raizes:
+        s = racionalToString(p[n],raiz)
+        print(s, end=" ")
+
+    print()
+
+
+# ======================================================================
+# FIM DA FUNÇÃO MAIN
+# ======================================================================
+
+
+# ======================================================================
+# CHAMADA DA FUNÇÃO MAIN
+# NÃO modifique os comandos deste bloco!
+# ======================================================================
+if __name__ == "__main__":
+    main()
+# ======================================================================
+# FIM DO BLOCO DE CHAMADA DA FUNÇÃO MAIN
+# ======================================================================
